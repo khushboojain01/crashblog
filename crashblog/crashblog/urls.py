@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from core.views import frontpage
+from core.views import frontpage, aboutpage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('about/', aboutpage, name='aboutpage'),
     path('',frontpage,name='frontpage'),
 ]
