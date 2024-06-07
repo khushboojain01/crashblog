@@ -11,3 +11,6 @@ class Post(models.Model):
     #contains detail page of the blog
     created_at = models.DateTimeField(auto_now_add=True)
     #tracks time when the post was published
+
+    class Meta:
+        ordering = ('-created_at',)
