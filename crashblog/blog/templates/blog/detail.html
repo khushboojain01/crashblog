@@ -20,18 +20,25 @@
                                 <h2 class = "subtitle is-4">Comments</h2>
 
                                 <form method="post">
-                                    {% csrf_token %}
-                                    
-                                    {{ form.as_p }}
+                                    {% csrf_token %} <!-- this is security by django  -->
+
+                                    {{ form.as_p }} <!--this will generate the form for us -->
                                         
-                                    <div class="field">
+                                    <div class="field"> <!--this will generate the submit button for us -->
                                         <div class="control">
                                             <button class="button is-sucess">Submit comment</button>
                                         </div>
                                     </div>
                                 </form>
 
-
+                                {% for comment in post.comments.all %} <!-- since models.py related_name = 'comments' -->
+                                <article class="media">
+                                    <div class ="media-content">
+                                        <strong>{{ comment.name }}</strong> <small>{{ comment.created_at | timesince }} ago</small>
+                                        {{ comment.body }}
+                                    </div>
+                                </article>
+                                {% endfor %}
                         </div>      
                     </div>
                 </div>
