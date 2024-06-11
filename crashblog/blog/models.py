@@ -1,10 +1,26 @@
 from django.db import models
 
-class Post(models.Model):
+class Category(models.Model):
     title = models.CharField(max_length= 255)
-    #field for storing the title of the post
     slug = models.SlugField() 
-    # it is the internet address for title
+    
+    class Meta:
+        ordering = ('title',  )
+        #sorts the categories alphabetically by title
+        verbose_name_plural = 'Categories'
+        #uses "Categories" as the plural name in the admin interface
+
+    def __str__(self):
+        return self.title 
+        #category object (1) converted to a string, returns its title
+
+class Post(models.Model):
+    category = models.ForeignKey(Category, name ='posts', on_delete=models.CASCADE)
+    #connect each post to a category; if the category is deleted, delete the post too
+    title = models.CharField(max_length= 255)
+    #field for storing the title of the post, limited to 255 characters
+    slug = models.SlugField() 
+    #URL-friendly version of the title
     intro = models.TextField()
     #for storing longer texts than charfield
     body= models.TextField()
@@ -14,9 +30,10 @@ class Post(models.Model):
 
     class Meta:
         ordering = ('-created_at',)
-    
+        #sort posts by creation date, newest first
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name ='comments', on_delete=models.CASCADE)
+      #connect each comment to a post; if the post is deleted, delete the comment too
     name = models.CharField(max_length=255)
     email = models.EmailField()
     body = models.TextField()

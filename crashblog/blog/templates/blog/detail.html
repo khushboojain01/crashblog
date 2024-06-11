@@ -19,7 +19,7 @@
 
                                 <h2 class = "subtitle is-4">Comments</h2>
 
-                                <form method="post">
+                                <form method="post" class="mb-6"> <!-- to add space between comment section and submit button  -->
                                     {% csrf_token %} <!-- this is security by django  -->
 
                                     {{ form.as_p }} <!--this will generate the form for us -->
@@ -32,7 +32,7 @@
                                 </form>
 
                                 {% for comment in post.comments.all %} <!-- since models.py related_name = 'comments' -->
-                                <article class="media">
+                                <article class="media box"><!-- "box" to create shadow box around the comment -->
                                     <div class ="media-content">
                                         <strong>{{ comment.name }}</strong> <small>{{ comment.created_at | timesince }} ago</small>
                                         {{ comment.body }}
