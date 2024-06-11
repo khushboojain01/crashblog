@@ -15,7 +15,7 @@ class Category(models.Model):
         #category object (1) converted to a string, returns its title
 
 class Post(models.Model):
-    category = models.ForeignKey(Category, name ='posts', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name ='posts', on_delete=models.CASCADE)
     #connect each post to a category; if the category is deleted, delete the post too
     title = models.CharField(max_length= 255)
     #field for storing the title of the post, limited to 255 characters
