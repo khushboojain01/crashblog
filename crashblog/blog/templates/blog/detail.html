@@ -10,37 +10,40 @@
                 <div class="columns">
                     <div class="column is-8 is-offset-2">
                         <div class="content is-medium">
-                                <h2 class="subtitle is-4"> {{ post.created_at|timesince }} ago</h2>
-                                <h1 class="title">{{ post.title }}</h1>
-                                <p><strong>{{ post.intro }}</strong></p>
-                                <p>{{ post.body }}</p>
+                            <h2 class="subtitle is-4"> {{ post.created_at|timesince }} ago</h2>
+                            <h1 class="title">{{ post.title }}</h1>
+                            <p><strong>{{ post.intro }}</strong></p>
+                            <p>{{ post.body }}</p>
 
-                                <p> <small> Category:{{ post.category }} </small></p>
+                            {% if post.category and post.category.slug %}
+                                <p><small>Category: <a href="{% url 'category_detail' post.category.slug %}">{{ post.category }}</a></small></p>
+                            {% else %}
+                                <p><small>Category: None</small></p>
+                            {% endif %}
+                            <hr>
 
-                                <hr>
+                            <h2 class="subtitle is-4">Comments</h2>
 
-                                <h2 class = "subtitle is-4">Comments</h2>
+                            <form method="post" class="mb-6"> <!-- to add space between comment section and submit button  -->
+                                {% csrf_token %} <!-- this is security by django  -->
 
-                                <form method="post" class="mb-6"> <!-- to add space between comment section and submit button  -->
-                                    {% csrf_token %} <!-- this is security by django  -->
+                                {{ form.as_p }} <!-- this will generate the form for us -->
 
-                                    {{ form.as_p }} <!--this will generate the form for us -->
-                                        
-                                    <div class="field"> <!--this will generate the submit button for us -->
-                                        <div class="control">
-                                            <button class="button is-sucess">Submit comment</button>
-                                        </div>
+                                <div class="field"> <!-- this will generate the submit button for us -->
+                                    <div class="control">
+                                        <button class="button is-success">Submit comment</button>
                                     </div>
-                                </form>
+                                </div>
+                            </form>
 
-                                {% for comment in post.comments.all %} <!-- since models.py related_name = 'comments' -->
+                            {% for comment in post.comments.all %} <!-- since models.py related_name = 'comments' -->
                                 <article class="media box"><!-- "box" to create shadow box around the comment -->
-                                    <div class ="media-content">
-                                        <strong>{{ comment.name }}</strong> <small>{{ comment.created_at | timesince }} ago</small>
+                                    <div class="media-content">
+                                        <strong>{{ comment.name }}</strong> <small>{{ comment.created_at|timesince }} ago</small>
                                         {{ comment.body }}
                                     </div>
                                 </article>
-                                {% endfor %}
+                            {% endfor %}
                         </div>      
                     </div>
                 </div>
@@ -49,3 +52,4 @@
     </div>
 </section>
 {% endblock %}
+
