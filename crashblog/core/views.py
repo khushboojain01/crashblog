@@ -13,3 +13,8 @@ def frontpage(request):
 def aboutpage(request):
     return render(request, 'core/aboutpage.html')
 
+def search(request, searchquery):
+    posts=Post.objects.filter(title__contains=searchquery)
+    
+    return render(request, 'core/frontpage.html',{'posts': posts}) 
+    #creates a dictionary here

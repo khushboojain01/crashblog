@@ -36,10 +36,12 @@
                     <div class="navbar-end">
                         <div class="navbar-item">
                             <div class="control has-icons-left">
-                                <input class="input is-rounded" type="text" placeholder="Search">
-                                <span class="icon is-left">
-                                    <i class="fa fa-search"></i>
-                                </span>
+                                <form id="searchForm">
+                                    <input class="input is-rounded" type="text" placeholder="Search" id="searchInput">
+                                    <span class="icon is-left">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                </form>
                             </div>
                         </div>
                         <a class="navbar-item is-active is-size-5 has-text-weight-semibold">
@@ -62,6 +64,24 @@
                 {% endblock %}
             </div>
         </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const searchForm = document.getElementById('searchForm');
+                const searchInput = document.getElementById('searchInput');
+
+                searchForm.addEventListener('submit', (event) => {
+                    const searchTerm = searchInput.value.trim();
+                    if (!searchTerm) {
+                        console.log('Please enter a search term');
+                    } else {
+                        console.log('Search term:', searchTerm);
+                        // Redirect to the new URL based on the search term
+                        window.open(`/search/${encodeURIComponent(searchTerm)}/`);
+                    }
+                });
+            });
+        </script>
 
         <footer class="footer">
             <div class="content has-text-centered">

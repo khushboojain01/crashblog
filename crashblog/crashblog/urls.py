@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from core.views import frontpage, aboutpage
+from core.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('about/', aboutpage, name='aboutpage'),
     path('', include('blog.urls')),
     path('',frontpage, name='frontpage'),
+    path('search/<str:searchquery>/', search, name='search'),
 ]
