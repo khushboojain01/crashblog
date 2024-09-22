@@ -13,6 +13,8 @@ class Category(models.Model):
     def __str__(self):
         return self.title 
         #category object (1) converted to a string, returns its title
+    def get_absolute_url(self):
+        return '/%s/' % self.slug
 
 class Post(models.Model):
     ACTIVE = 'active'
@@ -41,6 +43,12 @@ class Post(models.Model):
     class Meta:
         ordering = ('-created_at',)
         #sort posts by creation date, newest first
+
+    def __str__(self):
+        return self.title 
+    
+    def get_absolute_url(self):
+        return '/%s/%s/' % (self.category.slug, self.slug)    
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name ='comments', on_delete=models.CASCADE)
       #connect each comment to a post; if the post is deleted, delete the comment too

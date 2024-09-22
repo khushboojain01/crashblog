@@ -17,6 +17,12 @@
                                         <p>{{ post.intro }}</p>
                                     </a>
                                 </div>
+                            {% empty %}
+                                <div class = "content">
+                                    <p>
+                                        No Post Found
+                                    </p>
+                                </div>
                             {% endfor %}
                     </div>
                 </div>
