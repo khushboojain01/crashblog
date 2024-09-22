@@ -29,7 +29,8 @@ def category(request, slug):
 
 def search(request):
     searchquery = request.GET.get('query', '')
-    posts = Post.objects.filter(
+    posts = Post.objects.filter(status=Post.ACTIVE).filter( 
+        
         Q(title__icontains=searchquery) | 
         Q(intro__icontains=searchquery) | 
         Q(body__icontains=searchquery)

@@ -36,6 +36,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     #tracks time when the post was published
     status = models.CharField(max_length=10, choices = CHOICES_STATUS, default= ACTIVE)
+    image = models.ImageField(upload_to='uploads/', blank = True, null = True)
 
     class Meta:
         ordering = ('-created_at',)
