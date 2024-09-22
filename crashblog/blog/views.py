@@ -1,10 +1,11 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from .models import Post, Category
 from .forms import CommentForm
 from django.shortcuts import redirect
 
 def detail(request, category_slug, slug):  # address for the blog post
-    post = get_object_or_404(Post, slug=slug)  # to get post based on slug
+    post = get_object_or_404(Post, slug=slug, status = Post.ACTIVE)  # to get post based on slug
     # if doesn't get post from slug, throws error 404
 
     if request.method == 'POST':
@@ -23,8 +24,16 @@ def detail(request, category_slug, slug):  # address for the blog post
 
 def category(request, slug):
     category = get_object_or_404(Category, slug=slug)
+    posts = category.posts.filter(status=Post.ACTIVE)
+    return render(request, 'blog/category.html', {'category': category, 'posts': posts} )
+
+def search(request):
+    searchquery = request.GET.get('query', '')
+    posts = Post.objects.filter(
+        Q(title__icontains=searchquery) | 
+        Q(intro__icontains=searchquery) | 
+        Q(body__icontains=searchquery)
+    )
     
-    return render(request, 'blog/category.html', {'category': category})
-
-
+    return render(request, 'blog/search.html', {'posts': posts, 'query': searchquery})
 

@@ -35,24 +35,24 @@
                 <div id="navbarMenu" class="navbar-menu">
                     <div class="navbar-end">
                         <div class="navbar-item">
-                            <div class="control has-icons-left">
-                                <form id="searchForm">
-                                    <input class="input is-rounded" type="text" placeholder="Search" id="searchInput">
+                            <form method="get" action="{% url 'search' %}">
+                                <div class="control has-icons-left">
+                                    <input class="input is-rounded" type="text" name="query" placeholder="Search">
                                     <span class="icon is-left">
                                         <i class="fa fa-search"></i>
                                     </span>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
-                        <a class="navbar-item is-active is-size-5 has-text-weight-semibold">
+                    </div>
+                </div>                
+                        <a href = "/" class="navbar-item is-active is-size-5 has-text-weight-semibold">
                             Home
                         </a>
-                        <a class="navbar-item is-size-5 has-text-weight-semibold">
-                            Examples
-                        </a>
-                        <a class="navbar-item is-size-5 has-text-weight-semibold">
-                            Features
-                        </a>
+                        <a href="{% url 'aboutpage' %}"class="navbar-item is-size-5 has-text-weight-semibold">
+                            About
+                        </a> 
+                        
                     </div>
                 </div>
             </div>

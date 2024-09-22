@@ -15,6 +15,14 @@ class Category(models.Model):
         #category object (1) converted to a string, returns its title
 
 class Post(models.Model):
+    ACTIVE = 'active'
+    DRAFT = 'draft'
+
+    CHOICES_STATUS = (
+        (ACTIVE, 'Active'),
+        (DRAFT, 'Draft')
+    )
+
     category = models.ForeignKey(Category, related_name ='posts', on_delete=models.CASCADE)
     #connect each post to a category; if the category is deleted, delete the post too
     title = models.CharField(max_length= 255)
@@ -27,6 +35,7 @@ class Post(models.Model):
     #contains detail page of the blog
     created_at = models.DateTimeField(auto_now_add=True)
     #tracks time when the post was published
+    status = models.CharField(max_length=10, choices = CHOICES_STATUS, default= ACTIVE)
 
     class Meta:
         ordering = ('-created_at',)

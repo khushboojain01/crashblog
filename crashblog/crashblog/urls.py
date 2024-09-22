@@ -24,5 +24,5 @@ urlpatterns = [
     path('about/', aboutpage, name='aboutpage'),
     path('', include('blog.urls')),
     path('',frontpage, name='frontpage'),
-    path('search/<str:searchquery>/', search, name='search'),
+    #path('search/<str:searchquery>/', search, name='search'),
 ]

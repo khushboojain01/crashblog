@@ -5,7 +5,7 @@ from blog.models import Post
 
 # Create your views here.
 def frontpage(request):
-    posts=Post.objects.all()
+    posts=Post.objects.filter(status = Post.ACTIVE)
     
     return render(request, 'core/frontpage.html',{'posts': posts}) 
     #creates a dictionary here
@@ -13,8 +13,8 @@ def frontpage(request):
 def aboutpage(request):
     return render(request, 'core/aboutpage.html')
 
-def search(request, searchquery):
-    posts=Post.objects.filter(title__contains=searchquery)
+#def search(request, searchquery):
+    #posts=Post.objects.filter(title__contains=searchquery)
     
-    return render(request, 'core/frontpage.html',{'posts': posts}) 
+    #return render(request, 'core/frontpage.html',{'posts': posts}) 
     #creates a dictionary here
