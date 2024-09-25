@@ -7,8 +7,8 @@ class CommentItemInLine(admin.TabularInline):
     raw_id_fields = ['post']
 
 class PostAdmin(admin.ModelAdmin):
-    search_fields = ['title', 'intro', 'body']
-    list_display = ['title', 'slug', 'category','created_at', 'status']
+    search_fields = ['title', 'intro', 'body','owner', 'transaction_hash']
+    list_display = ['title', 'slug', 'category','created_at', 'status','owner', 'transaction_hash', 'block_number']
     list_filter = ['category','created_at', 'status']
     inlines = [ CommentItemInLine ]
     prepopulated_fields = {'slug': ('title', )}

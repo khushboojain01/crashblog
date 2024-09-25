@@ -16,7 +16,10 @@ class Category(models.Model):
     def get_absolute_url(self):
         return '/%s/' % self.slug
 
+from django.db import models
+
 class Post(models.Model):
+    # Existing fields
     ACTIVE = 'active'
     DRAFT = 'draft'
 
@@ -25,30 +28,29 @@ class Post(models.Model):
         (DRAFT, 'Draft')
     )
 
-    category = models.ForeignKey(Category, related_name ='posts', on_delete=models.CASCADE)
-    #connect each post to a category; if the category is deleted, delete the post too
-    title = models.CharField(max_length= 255)
-    #field for storing the title of the post, limited to 255 characters
+    category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
     slug = models.SlugField() 
-    #URL-friendly version of the title
     intro = models.TextField()
-    #for storing longer texts than charfield
-    body= models.TextField()
-    #contains detail page of the blog
+    body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    #tracks time when the post was published
-    status = models.CharField(max_length=10, choices = CHOICES_STATUS, default= ACTIVE)
-    image = models.ImageField(upload_to='uploads/', blank = True, null = True)
+    status = models.CharField(max_length=10, choices=CHOICES_STATUS, default=ACTIVE)
+    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
+
+    # New fields for proof of ownership
+    owner = models.CharField(max_length=255, blank=True, null=True)  # Ethereum address of the owner
+    transaction_hash = models.CharField(max_length=255, blank=True, null=True)
+    block_number = models.IntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ('-created_at',)
-        #sort posts by creation date, newest first
 
     def __str__(self):
         return self.title 
     
     def get_absolute_url(self):
-        return '/%s/%s/' % (self.category.slug, self.slug)    
+        return '/%s/%s/' % (self.category.slug, self.slug)
+    
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name ='comments', on_delete=models.CASCADE)
       #connect each comment to a post; if the post is deleted, delete the comment too
