@@ -41,7 +41,7 @@ class Post(models.Model):
     owner = models.CharField(max_length=255, blank=True, null=True)  # Ethereum address of the owner
     transaction_hash = models.CharField(max_length=255, blank=True, null=True)
     block_number = models.IntegerField(blank=True, null=True)
-
+    blockchain_id = models.IntegerField(null=True, blank=True)
     class Meta:
         ordering = ('-created_at',)
 

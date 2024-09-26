@@ -181,9 +181,6 @@ def create_blog_post(request):
                     # Hash the post content
                     post_hash = web3.keccak(text=blog_post.body)
                     
-                    # HexBytes object is already in the correct format for bytes32
-                    # No need for conversion
-                    
                     # Simulating an account (from Ganache)
                     account = web3.eth.accounts[0]  # Replace with MetaMask account for real use
 
@@ -196,10 +193,14 @@ def create_blog_post(request):
                     # Wait for transaction receipt
                     receipt = web3.eth.wait_for_transaction_receipt(transaction)
 
+                    # Get the blog count (which is now the ID of the post we just added)
+                    blog_count = contract.functions.blogCount().call()
+
                     # Store blockchain details in Django
                     blog_post.owner = account
                     blog_post.transaction_hash = receipt['transactionHash'].hex()
                     blog_post.block_number = receipt['blockNumber']
+                    blog_post.blockchain_id = blog_count - 1  # Subtract 1 because the count was incremented after our post
                     blog_post.save()
 
                     return redirect('frontpage')
@@ -227,15 +228,23 @@ def verify_ownership(request, post_id):
     if GANACHE_CONNECTED:
         try:
             # Hash the post content
-            post_hash = web3.toHex(web3.keccak(text=blog_post.body))
+            post_hash = web3.keccak(text=blog_post.body)
+            post_hash_hex = post_hash.hex()
 
-            # Retrieve the stored hash from the blockchain
-            owner, stored_hash = contract.functions.getBlogPostHash(post_id).call()
+            # Retrieve the stored hash from the blockchain using the blockchain_id
+            owner, stored_hash = contract.functions.getBlogPostHash(blog_post.blockchain_id).call()
+            stored_hash_hex = stored_hash.hex()
 
-            if post_hash == stored_hash:
+            print(f"Post ID: {post_id}")
+            print(f"Blockchain ID: {blog_post.blockchain_id}")
+            print(f"Computed hash: {post_hash_hex}")
+            print(f"Stored hash: {stored_hash_hex}")
+            print(f"Owner address: {owner}")
+
+            if post_hash_hex == stored_hash_hex:
                 status = "Ownership verified!"
             else:
-                status = "Ownership could not be verified."
+                status = f"Ownership could not be verified. Hashes do not match.\nComputed: {post_hash_hex[:10]}...\nStored: {stored_hash_hex[:10]}..."
         except Exception as e:
             status = f"Verification failed due to an error: {str(e)}"
     else:
