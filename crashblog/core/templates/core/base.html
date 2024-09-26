@@ -1,95 +1,95 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}Khushblog</title>
 
-        <title>{% block title %}{% endblock %}khush blog</title>
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
-        <link rel="stylesheet" href="https://unpkg.com/bulma@1.0.0/css/bulma.min.css" />
-        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-            integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!-- Font Awesome for Icons -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-        <style>
-            nav.navbar {
-                height: 6rem !important;
-                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
-            }
-        </style>
-    </head>
+    <!-- Custom Style -->
+    <style>
+        nav.navbar {
+            height: 6rem !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar is-light">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="{% url 'frontpage' %}" class="navbar-item">
+                    <strong>Khushblog</strong>
+                </a>
+                <span class="navbar-burger burger" data-target="navbarMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </div>
 
-    <body>
-        <nav class="navbar">
-            <div class="container">
-                <div class="navbar-brand">
-                    <a class="navbar-item" href="/">
-                        <strong>Khushblog</strong>
-                    </a>
-                    <span class="navbar-burger burger" data-target="navbarMenu">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
+            <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar-start">
+                    <a href="{% url 'create_blog_post' %}" class="navbar-item">Create Post</a>
+                    {% for category in categories %}
+                        <a href="{% url 'category_detail' category.slug %}" class="navbar-item">{{ category.title }}</a>
+                    {% endfor %}
                 </div>
-                <div id="navbarMenu" class="navbar-menu">
-                    <div class="navbar-end">
-                        <div class="navbar-item">
-                            <form method="get" action="{% url 'search' %}">
-                                <div class="control has-icons-left">
-                                    <input class="input is-rounded" type="text" name="query" placeholder="Search">
-                                    <span class="icon is-left">
-                                        <i class="fa fa-search"></i>
-                                    </span>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>                
-                        <a href = "/" class="navbar-item is-active is-size-5 has-text-weight-semibold">
-                            Home
-                        </a>
-                        <a href="{% url 'aboutpage' %}"class="navbar-item is-size-5 has-text-weight-semibold">
-                            About
-                        </a> 
-                        
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <form method="get" action="{% url 'search' %}">
+                            <div class="control has-icons-left">
+                                <input type="text" class="input is-rounded" name="query" id="searchInput" placeholder="Search...">
+                                <span class="icon is-left">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <section class="section">
-            <div class="container">
-                {% block content %}
-                {% endblock %}
-            </div>
-        </section>
+    <section class="section">
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </section>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const searchForm = document.getElementById('searchForm');
-                const searchInput = document.getElementById('searchInput');
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Khushblog</strong> by Khushboo. The source code is licensed under MIT.
+            </p>
+        </div>
+    </footer>
 
-                searchForm.addEventListener('submit', (event) => {
-                    const searchTerm = searchInput.value.trim();
-                    if (!searchTerm) {
-                        console.log('Please enter a search term');
-                    } else {
-                        console.log('Search term:', searchTerm);
-                        // Redirect to the new URL based on the search term
-                        window.open(`/search/${encodeURIComponent(searchTerm)}/`);
-                    }
-                });
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchForm = document.querySelector('form');
+            const searchInput = document.getElementById('searchInput');
+
+            searchForm.addEventListener('submit', (event) => {
+                const searchTerm = searchInput.value.trim();
+                if (!searchTerm) {
+                    console.log('Please enter a search term');
+                    event.preventDefault();
+                } else {
+                    console.log('Search term:', searchTerm);
+                    // Optionally add custom redirect logic here
+                }
             });
-        </script>
-
-        <footer class="footer">
-            <div class="content has-text-centered">
-              <p>
-                Copyright (c)-2024 khush blog 
-              </p>
-            </div>
-        </footer>
-
-    </body>
+        });
+    </script>
+</body>
 </html>
