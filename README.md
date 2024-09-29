@@ -1,7 +1,6 @@
-
 # **Blog: Integrating Blockchain for Authentic Post Ownership in Django Based Blog Application**
 
-CrashBlog is a modern blog application built using Django, which integrates blockchain technology to verify post ownership. This innovative approach ensures the authenticity and integrity of blog posts, making it a unique platform for writers and readers alike.
+A modern blog application built using Django, which integrates blockchain technology to verify post ownership. This innovative approach ensures the authenticity and integrity of blog posts, making it a unique platform for writers and readers alike.
 
 ## **Technologies Used**
 
@@ -10,22 +9,24 @@ CrashBlog is a modern blog application built using Django, which integrates bloc
 - **Solidity**: Language for writing smart contracts on the Ethereum blockchain.
 - **Ganache**: Personal blockchain for Ethereum development.
 - **Remix IDE**: Integrated development environment for Solidity smart contracts.
-- **Web3.py**: Python library for interacting with Ethereum blockchain.
+- **Web3.py**: Python library for interacting with the Ethereum blockchain.
 - **SQLite3**: Lightweight database for data storage.
 
 ## **Features**
 
 - **Post Management**: Create, view, and manage blog posts with ease.
+- **Ownership Tracking**: Each post includes **"OWNER"** and **"TRANSACTION HASH"** fields in the model, allowing for clear ownership identification.
+- **Blockchain Integration**: The presence of a **"BLOCK NUMBER"** in the post model indicates the use of a blockchain system to verify and record ownership.
+- **Functional Display**: The Django admin interface accurately displays ownership information, providing administrators with insights into post ownership.
 - **Categorization**: Organize posts into categories for better navigation.
 - **Search Functionality**: Quickly find posts using a search feature.
-- **User Authentication**: Secure sign-up and login for users.
-- **Blockchain Integration**: Verify ownership of posts through blockchain technology.
 
 ## **Blockchain Integration**
 
 This project incorporates Solidity smart contracts to establish blog post ownership on the blockchain. The smart contract code is located in the `blogpostownership.sol` file.
 
 ### **Steps for Blockchain Interaction:**
+
 1. **Local Blockchain**: Use Ganache to set up a local blockchain environment.
 2. **Smart Contract Deployment**: Deploy the smart contract using Remix IDE.
 3. **Application Interaction**: Utilize Web3.py to interact with the smart contract from the Django application, enabling ownership verification for each blog post.
