@@ -3,11 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Ownership</title>
+    <title>Blockchain Verification - {{ blog_post.title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #02001e;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-secondary);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .navbar {
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-home {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .verification-card {
+            background-color: var(--bg-primary);
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .post-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .post-title {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .verification-status {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .verification-status.success {
+            background-color: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--success-color);
+        }
+
+        .verification-status.error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+        }
+
+        .status-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .status-content {
+            flex: 1;
+        }
+
+        .status-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .blockchain-data {
+            margin-top: 2rem;
+            background-color: var(--bg-secondary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .data-row {
+            display: flex;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            width: 180px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .data-value {
+            flex: 1;
+            font-family: monospace;
+            font-size: 0.875rem;
+            word-break: break-all;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+        }
+
+        .copy-button:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .data-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .data-label {
+                width: 100%;
+            }
+
+            .data-value {
+                padding-left: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Ownership Verification for {{ blog_post.title }}</h1>
-    <p>Post Content: {{ blog_post.body }}</p>
-    <p>Verification Status: {{ status }}</p>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="nav-brand">🛡️ Blockchain Verification</div>
+            <a href="/" class="nav-home">🏠 Home</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="verification-card">
+            <div class="post-header">
+                <h1 class="post-title">{{ blog_post.title }}</h1>
+                <div class="post-meta">Posted on {{ blog_post.created_at|date:"F j, Y" }}</div>
+            </div>
+
+            <!-- Debug info - remove in production -->
+            <div style="display: none;">
+                Raw status: {{ status }}
+            </div>
+
+            <div class="verification-status {% if status == 'Ownership verified!' %}success{% else %}error{% endif %}">
+                <div class="status-icon">
+                    {% if status == 'Ownership verified!' %}✅{% else %}⚠️{% endif %}
+                </div>
+                <div class="status-content">
+                    <div class="status-title">
+                        {% if status == 'Ownership verified!' %}
+                            Ownership Verified
+                        {% else %}
+                            Verification Status
+                        {% endif %}
+                    </div>
+                    <p style="margin: 0.25rem 0 0 0">
+                        {{ status }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="blockchain-data">
+                <div class="data-row">
+                    <div class="data-label">Owner Address</div>
+                    <div class="data-value">
+                        {{ blog_post.owner }}
+                        <button class="copy-button" onclick="copyToClipboard('{{ blog_post.owner }}')" title="Copy to clipboard">
+                            📋
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-row">
+                    <div class="data-label">Transaction Hash</div>
+                    <div class="data-value">
+                        {{ blog_post.transaction_hash }}
+                        <button class="copy-button" onclick="copyToClipboard('{{ blog_post.transaction_hash }}')" title="Copy to clipboard">
+                            📋
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-row">
+                    <div class="data-label">Block Number</div>
+                    <div class="data-value">
+                        {{ blog_post.block_number }}
+                    </div>
+                </div>
+
+                {% if blog_post.blockchain_id != None %}
+                <div class="data-row">
+                    <div class="data-label">Blockchain ID</div>
+                    <div class="data-value">
+                        {{ blog_post.blockchain_id }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 KhushBlog • Secured by Ethereum Blockchain
+    </footer>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
 </body>
 </html>
