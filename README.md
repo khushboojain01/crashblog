@@ -89,7 +89,7 @@ Contributions are welcome! To contribute to the project:
    git checkout -b feature/your-feature-name
    ```
 3. **Make Your Changes**: Implement your feature or fix.
-4. **Submit a Pull Request**: Describe the changes you've made.
+4. **Submit a Pull Request**: Describe the changes you've made
 
 ## **License**
 
